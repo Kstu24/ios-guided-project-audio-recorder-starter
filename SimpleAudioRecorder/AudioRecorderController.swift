@@ -57,8 +57,13 @@ class AudioRecorderController: UIViewController {
         playButton.isSelected = isPlaying
         
         let elapsedTimer = audioPlayer?.currentTime ?? 0
+        let duration = audioPlayer?.duration ?? 0
         
         timeElapsedLabel.text = timeIntervalFormatter.string(for: elapsedTimer)
+        
+        timeSlider.minimumValue = 0
+        timeSlider.maximumValue = Float(duration)
+        timeSlider.value = Float(elapsedTimer)
         
     }
     
@@ -72,7 +77,7 @@ class AudioRecorderController: UIViewController {
     func startTimer() {
         timer?.invalidate()
         
-        timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] (_) in
+        timer = Timer.scheduledTimer(withTimeInterval: 0.030, repeats: true) { [weak self] (_) in
             guard let self = self else { return }
             
             self.updateViews()
@@ -222,6 +227,7 @@ extension AudioRecorderController: AVAudioPlayerDelegate {
     
     func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
         updateViews()
+        cancelTimer()
     }
     
     func audioPlayerDecodeErrorDidOccur(_ player: AVAudioPlayer, error: Error?) {
