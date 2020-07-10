@@ -56,14 +56,17 @@ class AudioRecorderController: UIViewController {
     func updateViews() {
         playButton.isSelected = isPlaying
         
-        let elapsedTimer = audioPlayer?.currentTime ?? 0
+        let elapsedTime = audioPlayer?.currentTime ?? 0
         let duration = audioPlayer?.duration ?? 0
+        let timeRemaining = duration.rounded() - elapsedTime
         
-        timeElapsedLabel.text = timeIntervalFormatter.string(for: elapsedTimer)
+        timeElapsedLabel.text = timeIntervalFormatter.string(for: elapsedTime)
         
         timeSlider.minimumValue = 0
         timeSlider.maximumValue = Float(duration)
-        timeSlider.value = Float(elapsedTimer)
+        timeSlider.value = Float(elapsedTime)
+        
+        timeRemainingLabel.text = "-" + timeIntervalFormatter.string(from: timeRemaining)!
         
     }
     
